@@ -31,7 +31,9 @@ import com.ab.view.slidingmenu.SlidingMenu;
 import com.ab.view.titlebar.AbTitleBar;
 import com.andbase.R;
 import com.andbase.friend.UserDao;
+import com.andbase.global.LocationProvider;
 import com.andbase.global.MyApplication;
+import com.andbase.global.LocationProvider.LocationListener;
 import com.andbase.im.activity.ChatActivity;
 import com.andbase.im.activity.ContacterActivity;
 import com.andbase.im.model.IMMessage;
@@ -40,6 +42,7 @@ import com.andbase.login.AboutActivity;
 import com.andbase.login.LoginActivity;
 import com.andbase.model.AppUser;
 import com.andbase.model.User;
+import com.baidu.location.BDLocation;
 import com.kfb.a.Zhao;
 import com.kfb.c.Kfb;
 
@@ -449,9 +452,6 @@ public class MainActivity extends AbActivity {
         });
 	}
 	
-	
-	
-	
 	@Override
 	protected void onPause() {
 		initTitleRightLayout();
@@ -463,7 +463,14 @@ public class MainActivity extends AbActivity {
 	@Override
 	protected void onResume() {
 		AbLogUtil.d(this, "--onResume--");
-		uploadAppUser();
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				ininLocation();
+			}
+		}, 5000);
+		
 		//如果debug模式被打开，显示监控
         //AbMonitorUtil.openMonitor(this);
 		super.onResume();
@@ -475,6 +482,29 @@ public class MainActivity extends AbActivity {
 		
 	}
 	
+	public void ininLocation(){
+		LocationProvider loaction = new LocationProvider(this);
+		loaction.setListener(new LocationListener() {
+
+			@Override
+			public void onReceiveLocation(BDLocation location) {
+				String province = location.getProvince();
+				String city = location.getCity();
+				double longitude = location.getLongitude();
+				double latitude = location.getLatitude();
+				String address = location.getAddrStr();
+				application.province = province;
+				application.city = city;
+				application.longitude = longitude;
+				application.latitude = latitude;
+				application.address = address;
+				
+				uploadAppUser();
+			}
+
+		});
+		loaction.startLocation();
+	}
 	
 
 }
