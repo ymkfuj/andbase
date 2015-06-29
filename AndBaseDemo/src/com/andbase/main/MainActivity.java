@@ -135,8 +135,6 @@ public class MainActivity extends AbActivity {
 		
 		httpUtil = AbHttpUtil.getInstance(this);
 		
-		uploadAppUser();
-
 	}
 	
 
@@ -395,10 +393,12 @@ public class MainActivity extends AbActivity {
         startActivity(friendIntent);
     }
 	
-	
+	/**
+	 * http测试
+	 */
 	public void uploadAppUser(){
 		// 一个url地址
-		String url = "http://amsoft.cn/content/templates/amsoft/upload_app_user.php"; 
+		String url = "http://amsoft.cn/content/templates/amsoft/test.php"; 
 		
 		AppUser user = new AppUser();
 		user.setImei(AbAppUtil.getIMEI(this));
@@ -417,7 +417,8 @@ public class MainActivity extends AbActivity {
 			//获取数据成功会调用这里
         	@Override
 			public void onSuccess(int statusCode, String content) {
-        		Log.d(TAG, "onSuccess uploadAppUser:"+content);
+        		//Log.d(TAG, "onSuccess uploadAppUser:"+content);
+        		//AbToastUtil.showToast(MainActivity.this, "测试："+content);
         		//AbDialogUtil.removeDialog(MainActivity.this);
         	}
         	
@@ -425,15 +426,15 @@ public class MainActivity extends AbActivity {
             @Override
 			public void onFailure(int statusCode, String content,
 					Throwable error) {
-            	Log.d(TAG, "onFailure");
-            	AbDialogUtil.removeDialog(MainActivity.this);
-            	AbToastUtil.showToast(MainActivity.this,error.getMessage());
+            	//Log.d(TAG, "onFailure");
+            	//AbDialogUtil.removeDialog(MainActivity.this);
+            	//AbToastUtil.showToast(MainActivity.this,error.getMessage());
 			}
 
             // 开始执行前
             @Override
 			public void onStart() {
-            	Log.d(TAG, "onStart");
+            	//Log.d(TAG, "onStart");
             	//显示进度框
             	//AbDialogUtil.showProgressDialog(HttpActivity.this,0,"正在查询...");
 			}
@@ -442,7 +443,7 @@ public class MainActivity extends AbActivity {
 			// 完成后调用，失败，成功
             @Override
             public void onFinish() { 
-            	Log.d(TAG, "onFinish");
+            	//Log.d(TAG, "onFinish");
             };
             
         });
@@ -462,6 +463,7 @@ public class MainActivity extends AbActivity {
 	@Override
 	protected void onResume() {
 		AbLogUtil.d(this, "--onResume--");
+		uploadAppUser();
 		//如果debug模式被打开，显示监控
         //AbMonitorUtil.openMonitor(this);
 		super.onResume();
